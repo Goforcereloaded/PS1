@@ -3,7 +3,7 @@ $process = "msedge" # Nom du processus à lancer
 $baseUrl = "https://www.bing.com/" # URL de Bing
 
 # Charger la liste des mots depuis le fichier words1.ps1
-. ./words1.ps1
+. "$PSScriptRoot\words1.ps1"
 
 $words2 = @(
     "PSG", "Marseille", "Lyon", "Monaco", "Lille", "Rennes", "Nice", "Strasbourg", "Montpellier", 
@@ -23,13 +23,19 @@ $shuffledWords2 = $words2 | Sort-Object { $random.Next() }
 function Type-Text($text) {
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
     $text.ToCharArray() | ForEach-Object {
+        # Générer un délai aléatoire entre 50 et 70 ms avec une chance de 1%, sinon entre 71 et 211 ms
+        if ($random.Next(0, 100) -lt 1) {
+            $delay = $random.Next(50, 71)
+        } else {
+            $delay = $random.Next(71, 212)
+        }
         $shell.SendKeys($_)
-        Start-Sleep -Milliseconds ($random.Next(50, 201)) # Délai aléatoire entre 50 et 200 ms entre chaque caractère
+        Start-Sleep -Milliseconds $delay # Délai aléatoire entre 50 et 70 ms ou 71 et 211 ms
     }
 }
 
 # Limite du nombre de recherches
-$maxRecherches = 30
+$maxRecherches = 4
 $compteur = 0
 
 # Parcourir les mots mélangés
@@ -53,9 +59,11 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
         $url = "Foot $word2a vs $word2b $number"
     }
 
-    # Ouvrir une nouvelle fenêtre du navigateur
-    $browserProcess = Start-Process $process -ArgumentList $baseUrl -PassThru
-    Start-Sleep -Seconds 2 # Attendre que le navigateur s'ouvre
+    # Ouvrir une nouvelle fenêtre du navigateur si nécessaire
+    if ($compteur -eq 0) {
+        $browserProcess = Start-Process $process -ArgumentList $baseUrl -PassThru
+        Start-Sleep -Seconds 2 # Attendre que le navigateur s'ouvre
+    }
 
     # Simuler la saisie du mot clé dans la barre de recherche Bing
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
@@ -64,11 +72,14 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     Type-Text $url
     $shell.SendKeys("{ENTER}") # Appuyer sur Entrée pour lancer la recherche
 
-    # Générer un délai aléatoire entre 4000 et 9000 millisecondes
-    $delay = $random.Next(4000, 9001)
+    # Générer un délai aléatoire entre 5000 et 9001 millisecondes
+    $delay = $random.Next(5000, 9001)
     # Attendre le délai spécifié
     Start-Sleep -Milliseconds $delay
 
     # Incrémenter le compteur
     $compteur++
 }
+
+# Fermer la fenêtre du script PowerShell
+exit
