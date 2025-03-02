@@ -1,3 +1,89 @@
+# Importation des assemblies nécessaires
+Add-Type -AssemblyName System.Windows.Forms
+
+# Création d'une variable globale pour suivre l'annulation
+$global:cancelled = $false
+
+# Création du formulaire
+$form = New-Object System.Windows.Forms.Form
+$form.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Sélection du nombre de recherches"))
+$form.Size = New-Object System.Drawing.Size(300, 150)
+
+# Création de la boîte de texte
+$textBox = New-Object System.Windows.Forms.TextBox
+$textBox.Location = New-Object System.Drawing.Point(30, 30)
+$form.Controls.Add($textBox)
+
+# Création du bouton pour soumettre la sélection
+$submitBtn = New-Object System.Windows.Forms.Button
+$submitBtn.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Valider"))
+$submitBtn.Location = New-Object System.Drawing.Point(30, 70)
+$submitBtn.Add_Click({
+    $selection = $textBox.Text
+
+    # Définir la limite du nombre de recherches
+    $script:maxRecherches = [int]$selection
+
+    # Déterminer le message approprié en fonction du nombre de recherches
+    if ($script:maxRecherches -eq 1) {
+        $message = "Vous avez sélectionné $script:maxRecherches recherche."
+    } else {
+        $message = "Vous avez sélectionné $script:maxRecherches recherches."
+    }
+
+    [System.Windows.Forms.MessageBox]::Show([System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($message)), [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Confirmation")))
+    
+    $form.Close()
+    Write-Output $message
+})
+
+# Création du bouton Annuler
+$cancelBtn = New-Object System.Windows.Forms.Button
+$cancelBtn.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Annuler"))
+$cancelBtn.Location = New-Object System.Drawing.Point(150, 70)
+$cancelBtn.Add_Click({
+    $global:cancelled = $true
+    $form.Close()
+})
+
+# Ajout des boutons au formulaire
+$form.Controls.Add($submitBtn)
+$form.Controls.Add($cancelBtn)
+
+# Définir le bouton de validation comme bouton par défaut
+$form.AcceptButton = $submitBtn
+
+# Définir le bouton Annuler comme bouton Annuler par défaut
+$form.CancelButton = $cancelBtn
+
+# Affichage du formulaire
+$form.ShowDialog()
+
+# Vérifier si le script a été annulé
+if ($global:cancelled) {
+    $okForm = New-Object System.Windows.Forms.Form
+    $okForm.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Annulation"))
+    $okForm.Size = New-Object System.Drawing.Size(300, 150)
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Le script a été annulé."))
+    $label.Size = New-Object System.Drawing.Size(250, 30)
+    $label.Location = New-Object System.Drawing.Point(25, 30)
+    $okForm.Controls.Add($label)
+
+    $okButton = New-Object System.Windows.Forms.Button
+    $okButton.Text = "OK"
+    $okButton.Location = New-Object System.Drawing.Point(100, 70)
+    $okButton.Add_Click({
+        $okForm.Close()
+    })
+    $okForm.Controls.Add($okButton)
+
+    $okForm.ShowDialog()
+    Start-Sleep -Seconds 1 # Ajouter un délai avant la fermeture du script
+    exit
+}
+
 # Script principal
 $process = "msedge" # Nom du processus à lancer
 $baseUrl = "https://www.bing.com/" # URL de Bing
@@ -34,13 +120,15 @@ function Type-Text($text) {
     }
 }
 
-# Limite du nombre de recherches
-$maxRecherches = 4
+# Initialisation de la limite du nombre de recherches
+if (-not $script:maxRecherches) {
+    $script:maxRecherches = 4 # Valeur par défaut au cas où aucune valeur n'est sélectionnée
+}
 $compteur = 0
 
 # Parcourir les mots mélangés
 for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length); $i++) {
-    if ($compteur -ge $maxRecherches) {
+    if ($compteur -ge $script:maxRecherches) {
         break
     }
 
@@ -80,6 +168,11 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     # Incrémenter le compteur
     $compteur++
 }
+
+# Affichage du message de fin d'exécution avec UTF-8
+$message = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Le script est terminé."))
+$title = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Fin de l'exécution"))
+[System.Windows.Forms.MessageBox]::Show($message, $title)
 
 # Fermer la fenêtre du script PowerShell
 exit
