@@ -8,6 +8,12 @@ $global:cancelled = $false
 $form = New-Object System.Windows.Forms.Form
 $form.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Sélection du nombre de recherches"))
 $form.Size = New-Object System.Drawing.Size(300, 150)
+$form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen  # Centre la boîte de dialogue sur l'écran
+
+# Gestionnaire d'événements pour la fermeture du formulaire
+$form.Add_FormClosed({
+    $global:cancelled = $true
+})
 
 # Création de la boîte de texte
 $textBox = New-Object System.Windows.Forms.TextBox
@@ -64,6 +70,7 @@ if ($global:cancelled) {
     $okForm = New-Object System.Windows.Forms.Form
     $okForm.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Annulation"))
     $okForm.Size = New-Object System.Drawing.Size(300, 150)
+    $okForm.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen  # Centre la boîte de dialogue sur l'écran
 
     $label = New-Object System.Windows.Forms.Label
     $label.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Le script a été annulé."))
@@ -122,7 +129,7 @@ function Type-Text($text) {
 
 # Initialisation de la limite du nombre de recherches
 if (-not $script:maxRecherches) {
-    $script:maxRecherches = 4 # Valeur par défaut au cas où aucune valeur n'est sélectionnée
+    $script:maxRecherches = 2 # Valeur par défaut au cas où aucune valeur n'est sélectionnée
 }
 $compteur = 0
 
