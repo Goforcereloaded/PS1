@@ -88,9 +88,10 @@ $submitBtn.Add_Click({
                 $message = "Vous avez sélectionné $script:maxRecherches recherches."
             }
 
-            $confirmationMessageBox = New-Object System.Windows.Forms.MessageBox
-            $confirmationMessageBoxText = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($message))
-            $confirmationMessageBox.Show($confirmationMessageBoxText, [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Confirmation")), [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information, [System.Windows.Forms.MessageBoxDefaultButton]::Button1, [System.Windows.Forms.MessageBoxOptions]::ServiceNotification).TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter  # Centrer le texte
+            [System.Windows.Forms.MessageBox]::Show([System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($message)), 
+                                                   [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Confirmation")), 
+                                                   [System.Windows.Forms.MessageBoxButtons]::OK, 
+                                                   [System.Windows.Forms.MessageBoxIcon]::Information)
 
             $form.Close()
             Write-Output $message
