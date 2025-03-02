@@ -75,3 +75,34 @@ $words1 += @(
     "parallaxe", "planete_naine", "precession", "propulsion", "radiogalaxie", "rotation", "sinus",
     "solaire", "spectre", "stellite", "subsysteme", "syzygie", "tangente"
 )
+# Partie 4
+$words1 += @(
+    "auteur", "biographie", "chapitre", "citations", "classement", "comics", "collection",
+    "couverture", "critique", "dictionnaire", "dos", "edition", "ecrivain", "encre", 
+    "essai", "fiction", "genre", "grammaire", "impression", "index", "litterature", "livre",
+    "manuscrit", "marque-page", "nouvelle", "ouvrage", "page", "plume", "poesie", "prologue",
+    "publication", "reliure", "resume", "roman", "saga", "scenariste", "sous-titre", "synopsis",
+    "table", "tableau", "texte", "typographie", "volume", "bibliographie", "conception",
+    "conteur", "conte", "couverture", "edition", "editeur", "epilogue", "illustrateur", "imprimeur",
+    "introduction", "isbn", "librairie", "lecteur", "legende", "memoire", "memoires", "narration",
+    "narrateur", "oeuvre", "ouvrage", "paragraphe", "poche", "poete", "prelude", "public",
+    "recueil", "redaction", "scenographie", "texte", "theme", "thriller", "tome", "traduction",
+    "typographie", "vers", "volume", "ouvrage", "fiction", "recit", "contenu", "structure",
+    "imaginaire", "dispositif", "parole", "edition", "signature", "createur"
+)
+# Partie 5
+$words1 += @(
+    "abeille", "agneau", "aigle", "albatros", "alligator", "alpaga", "anaconda", "anguille", 
+    "antilope", "araignee", "autruche", "baleine", "bison", "bouquetin", "buffle", "butor", 
+    "cachalot", "calamar", "camelle", "canard", "capybara", "caribou", "castor", "caiman", 
+    "cerf", "chimpanze", "chouette", "cigogne", "cochon", "colibri", "comorant", "corbeau", 
+    "crabe", "crocodile", "dauphin", "dindon", "dragon", "ecureuil", "elephant", "etoile_de_mer", 
+    "faucon", "feline", "fourmi", "furet", "girafe", "gorille", "guepard", "hippopotame", "hirondelle", 
+    "huitre", "iguane", "lama", "lapin", "leopard", "lièvre", "lion", "loutre", "loutre", "lynx", 
+    "macaque", "manchot", "mangouste", "meerkat", "moufette", "mouette", "mouton", "mulet", 
+    "naja", "narval", "nuide", "oie", "ornithorynque", "ours", "panda", "paon", "pardo", 
+    "pelican", "perdrix", "perroquet", "pingouin", "pieuvre", "pigeon", "poney", "porc", 
+    "porc-epic", "puma", "rhinoceros", "rossignol", "serpent", "sing", "souris", "tapir", 
+    "taureau", "tigre", "tortue", "trefle", "triton", "vache", "vallaby", "veau", "ver", 
+    "zebre"
+)
