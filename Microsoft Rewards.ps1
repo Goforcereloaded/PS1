@@ -178,16 +178,21 @@ $shuffledWords2 = $words2 | Sort-Object { $random.Next() }
 function Type-Text($text) {
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
     $text.ToCharArray() | ForEach-Object {
-        # Générer un délai aléatoire entre 50 et 70 ms avec une chance de 1%, sinon entre 71 et 211 ms
-        if ($random.Next(0, 100) -lt 1) {
+        # Générer un délai aléatoire entre 50 et 70 ms avec une chance de 1%
+        # sinon entre 71 et 221 ms, et 1% de chance d'avoir entre 222 et 301 ms
+        $randomValue = $random.Next(0, 100)
+        if ($randomValue -lt 1) {
             $delay = $random.Next(50, 71)
+        } elseif ($randomValue -ge 99) {
+            $delay = $random.Next(222, 302)
         } else {
-            $delay = $random.Next(71, 212)
+            $delay = $random.Next(71, 222)
         }
         $shell.SendKeys($_)
-        Start-Sleep -Milliseconds $delay # Délai aléatoire entre 50 et 70 ms ou 71 et 211 ms
+        Start-Sleep -Milliseconds $delay # Délai aléatoire entre 50 et 70 ms ou 71 et 221 ms ou 222 et 301 ms
     }
 }
+
 
 # Initialisation de la limite du nombre de recherches
 if (-not $script:maxRecherches) {
@@ -229,8 +234,8 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     Type-Text $url
     $shell.SendKeys("{ENTER}") # Appuyer sur Entrée pour lancer la recherche
 
-    # Générer un délai aléatoire entre 5000 et 9001 millisecondes
-    $delay = $random.Next(5000, 9001)
+    # Générer un délai aléatoire entre 5000 et 10001 millisecondes
+    $delay = $random.Next(5000, 10001)
     # Attendre le délai spécifié
     Start-Sleep -Milliseconds $delay
 
