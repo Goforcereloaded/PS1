@@ -1,8 +1,12 @@
 # Importation des assemblies nécessaires
 Add-Type -AssemblyName System.Windows.Forms
 
-# Création d'une variable globale pour suivre l'annulation
+# Création d'une variable globale pour suivre l'annulation et sa raison
 $global:cancelled = $false
+$global:cancelReason = ""
+
+# Création d'une variable globale pour suivre la validation de l'avertissement
+$global:warningConfirmed = $false
 
 # Création du formulaire
 $form = New-Object System.Windows.Forms.Form
@@ -11,8 +15,11 @@ $form.Size = New-Object System.Drawing.Size(300, 150)
 $form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen  # Centre la boîte de dialogue sur l'écran
 
 # Gestionnaire d'événements pour la fermeture du formulaire
-$form.Add_FormClosed({
-    $global:cancelled = $true
+$form.Add_FormClosing({
+    if (-not $global:warningConfirmed) {
+        $global:cancelled = $true
+        $global:cancelReason = "Le script a été annulé."
+    }
 })
 
 # Création de la boîte de texte
@@ -30,17 +37,66 @@ $submitBtn.Add_Click({
     # Définir la limite du nombre de recherches
     $script:maxRecherches = [int]$selection
 
-    # Déterminer le message approprié en fonction du nombre de recherches
-    if ($script:maxRecherches -eq 1) {
-        $message = "Vous avez sélectionné $script:maxRecherches recherche."
+    # Annuler le script si le nombre de recherches est supérieur à 40
+    if ($script:maxRecherches -gt 40) {
+        $global:cancelled = $true
+        $form.Close()
     } else {
-        $message = "Vous avez sélectionné $script:maxRecherches recherches."
-    }
+        # Vérifier si le nombre de recherches est supérieur à 30
+        if ($script:maxRecherches -gt 30) {
+            # Afficher un message d'avertissement avec deux boutons
+            $warningForm = New-Object System.Windows.Forms.Form
+            $warningForm.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Avertissement"))
+            $warningForm.Size = New-Object System.Drawing.Size(300, 150)
+            $warningForm.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen  # Centre la boîte de dialogue sur l'écran
 
-    [System.Windows.Forms.MessageBox]::Show([System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($message)), [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Confirmation")))
-    
-    $form.Close()
-    Write-Output $message
+            $warningLabel = New-Object System.Windows.Forms.Label
+            $warningLabel.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Vous avez sélectionné plus de 30 recherches. Voulez-vous continuer ?"))
+            $warningLabel.Size = New-Object System.Drawing.Size(250, 30)
+            $warningLabel.Location = New-Object System.Drawing.Point(25, 30)
+            $warningForm.Controls.Add($warningLabel)
+
+            $continueBtn = New-Object System.Windows.Forms.Button
+            $continueBtn.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Continuer"))
+            $continueBtn.Location = New-Object System.Drawing.Point(30, 70)
+            $continueBtn.Add_Click({
+                $global:warningConfirmed = $true
+                $warningForm.Close()
+            })
+            $warningForm.Controls.Add($continueBtn)
+
+            $cancelBtn = New-Object System.Windows.Forms.Button
+            $cancelBtn.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Annuler"))
+            $cancelBtn.Location = New-Object System.Drawing.Point(150, 70)
+            $cancelBtn.Add_Click({
+                $global:warningConfirmed = $false
+                $warningForm.Close()
+            })
+            $warningForm.Controls.Add($cancelBtn)
+
+            $warningForm.ShowDialog()
+        } else {
+            $global:warningConfirmed = $true
+        }
+
+        if ($global:warningConfirmed) {
+            # Déterminer le message approprié en fonction du nombre de recherches
+            if ($script:maxRecherches -eq 1) {
+                $message = "Vous avez sélectionné $script:maxRecherches recherche."
+            } else {
+                $message = "Vous avez sélectionné $script:maxRecherches recherches."
+            }
+
+            [System.Windows.Forms.MessageBox]::Show([System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($message)), [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Confirmation")))
+
+            $form.Close()
+            Write-Output $message
+        } else {
+            $global:cancelled = $true
+            $global:cancelReason = "Le script a été annulé."
+            $form.Close()
+        }
+    }
 })
 
 # Création du bouton Annuler
@@ -49,6 +105,7 @@ $cancelBtn.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]:
 $cancelBtn.Location = New-Object System.Drawing.Point(150, 70)
 $cancelBtn.Add_Click({
     $global:cancelled = $true
+    $global:cancelReason = "Le script a été annulé."
     $form.Close()
 })
 
@@ -73,7 +130,7 @@ if ($global:cancelled) {
     $okForm.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen  # Centre la boîte de dialogue sur l'écran
 
     $label = New-Object System.Windows.Forms.Label
-    $label.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes("Le script a été annulé."))
+    $label.Text = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($global:cancelReason))
     $label.Size = New-Object System.Drawing.Size(250, 30)
     $label.Location = New-Object System.Drawing.Point(25, 30)
     $okForm.Controls.Add($label)
