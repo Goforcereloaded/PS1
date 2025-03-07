@@ -106,3 +106,20 @@ $words1 += @(
     "taureau", "tigre", "tortue", "trefle", "triton", "vache", "vallaby", "veau", "ver", 
     "zebre"
 )
+# Partie 6
+$words1 += @(
+    "ecole", "college", "universite", "bibliotheque", "enseignant", "professeur", "etudiant", "classe", 
+    "bureau", "tableau", "cahier", "stylo", "livre", "examen", "devoir", "recreation", "cour", "parc", 
+    "ecole_maternelle", "ecole_primaire", "ecole_secondaire", "lycee", "universite_publique", 
+    "universite_privee", "etudes", "diplome", "certificat", "academie", "formation", "enseignement", 
+    "pedagogie", "programme", "horaire", "cours", "salle_de_classe", "enseignement_a_distance", 
+    "enseignement_en_presentiel", "faculte", "campus", "residence_universitaire", "restaurant_universitaire", 
+    "amphitheatre", "laboratoire", "recherche", "dissertation", "memoire", "these", "conference", 
+    "seminaire", "atelier", "etude_de_cas", "travaux_pratiques", "travaux_diriges", "repetition", 
+    "evaluation", "note", "correction", "bulletin", "rentree_scolaire", "vacances_scolaires", "fete_de_l_ecole", 
+    "sortie_scolaire", "voyage_educatif", "echange_etudiant", "bourse_d_etude", "orientation", 
+    "counseling", "tutorat", "formation_professionnelle", "emploi_du_temps", "planning", "ressources_pedagogiques", 
+    "matieres", "disciplines", "interdisciplinarite", "pedagogie_active", "projet_educatif", "partenariat_educatif", 
+    "atelier_creatif", "club_sportif", "ecole_numérique", "enseignement_inclusif", "diversite", "equite", 
+    "inclusion", "respect", "collaboration", "participation", "implication", "motivation", "reussite"
+)
