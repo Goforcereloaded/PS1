@@ -161,12 +161,27 @@ $baseUrl = "https://www.bing.com/" # URL de Bing
 . "$PSScriptRoot\words1.ps1"
 
 $words2 = @(
+    # Equipes de France
     "PSG", "Marseille", "Lyon", "Monaco", "Lille", "Rennes", "Nice", "Strasbourg", "Montpellier", 
     "Nantes", "Saint-Etienne", "Reims", "Bordeaux", "Angers", "Metz", "Brest", "Troyes", "Lorient", 
-    "Clermont", "Lens", "Anderlecht", "Club Brugge", "Genk", "Gent", "Standard Liege", "Royal Antwerp", 
-    "Charleroi", "Zulte Waregem", "KV Mechelen", "OH Leuven", "Eupen", "Cercle Brugge", "Sint-Truiden", 
-    "KV Kortrijk", "Waasland-Beveren", "Seraing", "Beerschot", "Westerlo"
+    "Clermont", "Lens",
+    
+    # Equipes de Belgique
+    "Anderlecht", "Club Brugge", "Genk", "Gent", "Standard Liege", "Royal Antwerp", "Charleroi", 
+    "Zulte Waregem", "KV Mechelen", "OH Leuven", "Eupen", "Cercle Brugge", "Sint-Truiden", 
+    "KV Kortrijk", "Waasland-Beveren", "Seraing", "Beerschot", "Westerlo",
+    
+    # Equipes des Pays-Bas
+    "Ajax", "PSV", "Feyenoord", "AZ", "Utrecht", "Vitesse", "Twente", "Groningen", "Heerenveen", 
+    "Willem II", "Heracles", "Fortuna Sittard", "Sparta Rotterdam", "PEC Zwolle", "RKC Waalwijk", 
+    "VVV-Venlo", "Emmen", "ADO Den Haag",
+    
+    # Equipes d'Allemagne
+    "Bayern Munich", "Borussia Dortmund", "RB Leipzig", "Bayer Leverkusen", "Borussia Monchengladbach", 
+    "Wolfsburg", "Eintracht Frankfurt", "Union Berlin", "Freiburg", "Hoffenheim", "Stuttgart", 
+    "Augsburg", "Hertha Berlin", "Mainz", "Werder Bremen", "Arminia Bielefeld", "Koln", "Schalke"
 )
+
 
 $random = New-Object System.Random # Création d'un objet Random
 
