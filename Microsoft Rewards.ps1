@@ -159,29 +159,7 @@ $baseUrl = "https://www.bing.com/" # URL de Bing
 
 # Charger la liste des mots depuis le fichier words1.ps1
 . "$PSScriptRoot\words1.ps1"
-
-$words2 = @(
-    # Equipes de France
-    "PSG", "Marseille", "Lyon", "Monaco", "Lille", "Rennes", "Nice", "Strasbourg", "Montpellier", 
-    "Nantes", "Saint-Etienne", "Reims", "Bordeaux", "Angers", "Metz", "Brest", "Troyes", "Lorient", 
-    "Clermont", "Lens",
-    
-    # Equipes de Belgique
-    "Anderlecht", "Club Brugge", "Genk", "Gent", "Standard Liege", "Royal Antwerp", "Charleroi", 
-    "Zulte Waregem", "KV Mechelen", "OH Leuven", "Eupen", "Cercle Brugge", "Sint-Truiden", 
-    "KV Kortrijk", "Waasland-Beveren", "Seraing", "Beerschot", "Westerlo",
-    
-    # Equipes des Pays-Bas
-    "Ajax", "PSV", "Feyenoord", "AZ", "Utrecht", "Vitesse", "Twente", "Groningen", "Heerenveen", 
-    "Willem II", "Heracles", "Fortuna Sittard", "Sparta Rotterdam", "PEC Zwolle", "RKC Waalwijk", 
-    "VVV-Venlo", "Emmen", "ADO Den Haag",
-    
-    # Equipes d'Allemagne
-    "Bayern Munich", "Borussia Dortmund", "RB Leipzig", "Bayer Leverkusen", "Borussia Monchengladbach", 
-    "Wolfsburg", "Eintracht Frankfurt", "Union Berlin", "Freiburg", "Hoffenheim", "Stuttgart", 
-    "Augsburg", "Hertha Berlin", "Mainz", "Werder Bremen", "Arminia Bielefeld", "Koln", "Schalke"
-)
-
+. "$PSScriptRoot\foot.ps1"
 
 $random = New-Object System.Random # Création d'un objet Random
 
@@ -221,7 +199,7 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
         break
     }
 
-    # Sélectionner aléatoirement une des deux listes pour les deux mots avec une probabilité de 20% pour $words2
+    # Sélectionner aléatoirement une des deux listes pour les deux mots avec une probabilité de 20% pour $words2 (foot)
     $useWords2 = $random.Next(0, 5) -eq 0
     if ($useWords2) {
         $word2a = $shuffledWords2[$random.Next($shuffledWords2.Length)]
