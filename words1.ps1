@@ -146,3 +146,25 @@ $words1 += @(
     "atelier_creatif", "club_sportif", "ecole_numérique", "enseignement_inclusif", "diversite", "equite", 
     "inclusion", "respect", "collaboration", "participation", "implication", "motivation", "reussite"
 )
+# Partie 7
+$words1 += @(
+    "automobile", "voiture", "moteur", "carburant", "essence", "diesel", "electrique", "hybride",
+    "roue", "pneu", "jante", "frein", "embrayage", "volant", "siege", "tableau_de_bord", "vitre",
+    "coffre", "capot", "portiere", "retro", "phare", "clignotant", "pare_brise", "essuie_glace",
+    "echappement", "reservoir", "caisse", "pare_choc", "klaxon", "plaque", "boite_de_vitesse",
+    "automatique", "manuelle", "acceleration", "vitesse", "kilometre", "route", "autoroute",
+    "rue", "trajet", "gps", "navigation", "radar", "garage", "atelier", "carrosserie", "peinture",
+    "reparation", "entretien", "revision", "diagnostic", "permis", "conducteur", "chauffeur",
+    "assurance", "taxe", "immatriculation", "achat", "vente", "occasion", "neuf", "prix",
+    "marque", "modele", "cabriolet", "sportive", "berline", "monospace", "utilitaire", "camion",
+    "remorque", "voiturette", "vehicule", "routeur", "allumage", "starter", "radio", "audio",
+    "bluetooth", "chauffage", "climatisation", "cruise_control", "parking", "stationnement",
+    "course", "piste", "circuit", "competition", "tourisme", "auto_ecole", "traction", "propulsion",
+    "injection", "suspension", "batterie", "charge", "autonomie", "connecte", "technologie",
+    "application", "utilisation", "essai", "ligne", "design", "puissance", "coupe", "conception",
+    "malus", "bonus", "regulateur", "distance", "chassis", "toit", "bougie", "mode", "eco",
+    "sport", "panne", "assistance", "depannage", "courroie", "courant", "energie", "ventilation",
+    "siege_arriere", "siege_avant", "essuie_main", "reservoir", "huile", "filtre", "antenne",
+    "ampoule", "visibilite", "detailing", "pliage", "vitesse_max", "turbo", "boite_auto",
+    "temps", "route_montagne", "carte_grise", "bouton", "starter_motor", "roulage", "feux_stop"
+)
