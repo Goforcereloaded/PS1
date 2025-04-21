@@ -199,7 +199,7 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
         break
     }
 
-    # Sélectionner aléatoirement une des deux listes pour les deux mots avec une probabilité de 20% pour $words2 (foot)
+    # Sélectionner aléatoirement une des deux listes pour les deux mots avec une probabilité de 25% pour $words2 (foot)
     $useWords2 = $random.Next(0, 4) -eq 0
     if ($useWords2) {
         $word2a = $shuffledWords2[$random.Next($shuffledWords2.Length)]
