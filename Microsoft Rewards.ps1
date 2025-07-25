@@ -157,11 +157,42 @@ if ($global:cancelled) {
 $process = "msedge" # Nom du processus à lancer
 $baseUrl = "https://www.bing.com/" # URL de Bing
 
-# Charger la liste des mots depuis le fichier words1.ps1
-. "$PSScriptRoot\words1.ps1"
+# Charger la liste des mots depuis les fichiers
+# . "$PSScriptRoot\foot.ps1"
+# Liste des fichiers disponibles
+$listeFichiers = @(
+    "$PSScriptRoot\dic2019_1.txt",
+    "$PSScriptRoot\dic2019_2.txt",
+    "$PSScriptRoot\dic2019_3.txt",
+    "$PSScriptRoot\dic2019_4.txt",
+    "$PSScriptRoot\dic2019_5.txt",
+    "$PSScriptRoot\dic2019_6.txt",
+    "$PSScriptRoot\dic2019_7.txt"
+)
+
+# Sélection aléatoire d’un fichier
+$choixFichier = Get-Random -InputObject $listeFichiers
+
+# Chargement des mots depuis le fichier sélectionné
+$words1 = Get-Content $choixFichier -Encoding utf8
+
+# Éventuel chargement de foot.ps1 si nécessaire
 . "$PSScriptRoot\foot.ps1"
 
 $random = New-Object System.Random # Création d'un objet Random
+
+# Fonction pour supprimer les accents des caractères Unicode
+function Remove-Accents {
+    param ($text)
+    $normalized = $text.Normalize([Text.NormalizationForm]::FormD)
+    $sb = New-Object -TypeName System.Text.StringBuilder
+    foreach ($char in $normalized.ToCharArray()) {
+        if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($char) -ne 'NonSpacingMark') {
+            [void]$sb.Append($char)
+        }
+    }
+    return $sb.ToString()
+}
 
 # Mélanger les mots de manière aléatoire
 $shuffledWords1 = $words1 | Sort-Object { $random.Next() }
@@ -193,27 +224,27 @@ function Type-Text($text) {
                 $shell.SendKeys("{BACKSPACE}")
                 Start-Sleep -Milliseconds ($random.Next(60, 120))
             }
-            Start-Sleep -Milliseconds ($random.Next(150, 400)) # Pause de confusion
+            Start-Sleep -Milliseconds ($random.Next(75, 225)) # Pause de confusion
         }
 
         # Pause naturelle après un espace ou une ponctuation
         if ($_ -match "[\s.,;!?]") {
-            Start-Sleep -Milliseconds ($random.Next(150, 400))
+            Start-Sleep -Milliseconds ($random.Next(75, 225))
         }
 
         # Délai plus long pour les majuscules
         if ($_ -match "[A-Z]") {
-            Start-Sleep -Milliseconds ($random.Next(100, 150)) # Simulation de shift ou frappe intentionnelle
+            Start-Sleep -Milliseconds ($random.Next(75, 125)) # Simulation de shift ou frappe intentionnelle
         }
 
-        # Générer un délai aléatoire entre 50 et 275 ms avec distribution personnalisée
+        # Générer un délai aléatoire entre 50 et 255 ms avec distribution personnalisée
         $chance = $random.Next(0, 100)
         if ($chance -lt 30) {
-            $delay = $random.Next(50, 101)   # 30% : frappe rapide
+            $delay = $random.Next(50, 89)   # 30% : frappe rapide
         } elseif ($chance -lt 80) {
-            $delay = $random.Next(101, 151)  # 50% : frappe normale
+            $delay = $random.Next(90, 141)  # 50% : frappe normale
         } else {
-            $delay = $random.Next(151, 276)  # 20% : frappe plus lente
+            $delay = $random.Next(142, 256)  # 20% : frappe plus lente
         }
 
         $shell.SendKeys($_)
@@ -241,11 +272,11 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
         while ($word2a -eq $word2b) {
             $word2b = $shuffledWords2[$random.Next($shuffledWords2.Length)]
         }
-        $number = $random.Next(11, 102) # Générer un nombre aléatoire entre 11 et 101
+        $number = $random.Next(11, 100) # Générer un nombre aléatoire entre 11 et 99
         $url = "Foot $word2a vs $word2b $number"
     } else {
         $word1 = $shuffledWords1[$i]
-        $url = "definition de $word1"
+        $url = "Definition de $word1"
     }
 
     # Ouvrir une nouvelle fenêtre du navigateur si nécessaire
@@ -258,7 +289,8 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
     $shell.SendKeys("^e") # Placer le curseur dans la barre de recherche Bing (Ctrl+E)
     Start-Sleep -Milliseconds 350 # Attendre 350 ms pour s'assurer que le curseur est en place
-    Type-Text $url
+    $cleanUrl = Remove-Accents $url
+    Type-Text $cleanUrl
     $shell.SendKeys("{ENTER}") # Appuyer sur Entrée pour lancer la recherche
 
     # Générer un délai aléatoire entre 5000 et 12001 millisecondes
