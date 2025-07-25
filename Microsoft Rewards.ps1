@@ -167,25 +167,59 @@ $random = New-Object System.Random # Création d'un objet Random
 $shuffledWords1 = $words1 | Sort-Object { $random.Next() }
 $shuffledWords2 = $words2 | Sort-Object { $random.Next() }
 
-# Fonction pour simuler la saisie de texte avec un délai aléatoire
+# Fonction pour simuler la saisie de texte avec un délai aléatoire et des comportements humains
 function Type-Text($text) {
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
+
     $text.ToCharArray() | ForEach-Object {
-        # Générer un délai aléatoire entre 50 et 70 ms avec une chance de 1%
-        # sinon entre 71 et 221 ms, et 1% de chance d'avoir entre 222 et 311 ms
-        $randomValue = $random.Next(0, 100)
-        if ($randomValue -lt 1) {
-            $delay = $random.Next(50, 71)
-        } elseif ($randomValue -ge 99) {
-            $delay = $random.Next(222, 312)
-        } else {
-            $delay = $random.Next(71, 222)
+        # Générer une erreur de frappe isolée avec une probabilité de 3%
+        if ($random.Next(0, 100) -lt 3) {
+            $wrongChar = [char]($random.Next(77, 111)) # lettre aléatoire minuscule
+            $shell.SendKeys($wrongChar)
+            Start-Sleep -Milliseconds ($random.Next(50, 100))
+            $shell.SendKeys("{BACKSPACE}")
+            Start-Sleep -Milliseconds ($random.Next(100, 150))
         }
+
+        # Simuler une confusion complète avec correction (1% de chance)
+        if ($random.Next(0, 100) -eq 50) {
+            $garbleLength = $random.Next(2, 5) # Nombre de caractères erronés
+            for ($i = 0; $i -lt $garbleLength; $i++) {
+                $garbleChar = [char]($random.Next(77, 111))
+                $shell.SendKeys($garbleChar)
+                Start-Sleep -Milliseconds ($random.Next(40, 80))
+            }
+            for ($i = 0; $i -lt $garbleLength; $i++) {
+                $shell.SendKeys("{BACKSPACE}")
+                Start-Sleep -Milliseconds ($random.Next(60, 120))
+            }
+            Start-Sleep -Milliseconds ($random.Next(150, 400)) # Pause de confusion
+        }
+
+        # Pause naturelle après un espace ou une ponctuation
+        if ($_ -match "[\s.,;!?]") {
+            Start-Sleep -Milliseconds ($random.Next(150, 400))
+        }
+
+        # Délai plus long pour les majuscules
+        if ($_ -match "[A-Z]") {
+            Start-Sleep -Milliseconds ($random.Next(100, 150)) # Simulation de shift ou frappe intentionnelle
+        }
+
+        # Générer un délai aléatoire entre 50 et 275 ms avec distribution personnalisée
+        $chance = $random.Next(0, 100)
+        if ($chance -lt 30) {
+            $delay = $random.Next(50, 101)   # 30% : frappe rapide
+        } elseif ($chance -lt 80) {
+            $delay = $random.Next(101, 151)  # 50% : frappe normale
+        } else {
+            $delay = $random.Next(151, 276)  # 20% : frappe plus lente
+        }
+
         $shell.SendKeys($_)
-        Start-Sleep -Milliseconds $delay # Délai aléatoire entre 50 et 70 ms ou 71 et 221 ms ou 222 et 311 ms
+        Start-Sleep -Milliseconds $delay
     }
 }
-
 
 # Initialisation de la limite du nombre de recherches
 if (-not $script:maxRecherches) {
@@ -223,12 +257,12 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     # Simuler la saisie du mot clé dans la barre de recherche Bing
     $shell = New-Object -ComObject wscript.shell # Initialisation de l'objet shell
     $shell.SendKeys("^e") # Placer le curseur dans la barre de recherche Bing (Ctrl+E)
-    Start-Sleep -Milliseconds 300 # Attendre 300 ms pour s'assurer que le curseur est en place
+    Start-Sleep -Milliseconds 350 # Attendre 350 ms pour s'assurer que le curseur est en place
     Type-Text $url
     $shell.SendKeys("{ENTER}") # Appuyer sur Entrée pour lancer la recherche
 
-    # Générer un délai aléatoire entre 5000 et 11001 millisecondes
-    $delay = $random.Next(5000, 11001)
+    # Générer un délai aléatoire entre 5000 et 12001 millisecondes
+    $delay = $random.Next(5000, 12001)
     # Attendre le délai spécifié
     Start-Sleep -Milliseconds $delay
 
