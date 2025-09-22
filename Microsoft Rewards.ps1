@@ -293,8 +293,8 @@ for ($i = 0; $i -lt [math]::Min($shuffledWords1.Length, $shuffledWords2.Length);
     Type-Text $cleanUrl
     $shell.SendKeys("{ENTER}") # Appuyer sur Entrée pour lancer la recherche
 
-    # Générer un délai aléatoire entre 5000 et 12001 millisecondes
-    $delay = $random.Next(5000, 12001)
+    # Générer un délai aléatoire entre 6000 et 14001 millisecondes
+    $delay = $random.Next(5000, 14001)
     # Attendre le délai spécifié
     Start-Sleep -Milliseconds $delay
 
